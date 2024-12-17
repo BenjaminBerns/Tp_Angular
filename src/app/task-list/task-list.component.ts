@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Task, TaskService } from '../task.service';
 
 @Component({
   selector: 'app-task-list',
@@ -10,31 +11,17 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class TaskListComponent {
-  tasks  = [{name : "benjamin1", etat : false},
-     {name : "benjamin 2", etat : false},
-    {name : "okkkkk", etat : false}
-  ];
+
+  taskService = new TaskService();
+
+  tasks = this.taskService.GetAllTasks();
+
   newTask = "";
 
-  modifEtat(index : number): void{
-    this.tasks[index].etat = !this.tasks[index].etat;
+  isBackgroundBlack: boolean = false;
+
+  toggleBackground(): void {
+    this.isBackgroundBlack = !this.isBackgroundBlack;
   }
-  
-  addTask(): void {
-    if (this.newTask && this.newTask.trim() !== '') {
-      this.tasks.push({ name: this.newTask.trim(), etat: false });
-      this.newTask = '';
-    }
-}
-
-  removeTask(index : number): void {
-      this.tasks.splice(index, 1);
-}
-
-isBackgroundBlack: boolean = false;
-
-toggleBackground(): void {
-  this.isBackgroundBlack = !this.isBackgroundBlack;
-}
 }
 
