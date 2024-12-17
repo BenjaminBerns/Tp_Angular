@@ -1,0 +1,13 @@
+<div [class.bg-black]="isBackgroundBlack" class="container">
+   <h2>Liste des tâches</h2>
+    <div class="presentation">
+        <li *ngFor="let task of tasks; let i = index" >{{ task.name + " " + task.etat }}
+        <button (click)="removeTask(i)" class="delete">Supprimer</button>
+        <button (click)="modifEtat(i)" class="modify">modifier</button>
+    </li>
+</div>
+
+<input type="text"  [(ngModel)]="newTask">
+<button  (click)="addTask()" type="submit">Enregistrer</button> 
+<button (click)="toggleBackground()">☽</button>
+</div>
