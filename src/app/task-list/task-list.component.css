@@ -3,6 +3,7 @@
 }
 
 .container{
+  z-index: -1;
     top: 0;
     left: 0;
     position: fixed;
@@ -78,3 +79,8 @@ button{
   transition: 0.2s ease-in-out;
 }
 
+.moon-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
