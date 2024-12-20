@@ -1,0 +1,16 @@
+<div class="content">
+    <div *ngIf="edit; else editionActive">
+        <div class="content">
+            <input type="text" [(ngModel)]="modifLibelle">
+            <input type="checkbox" [(ngModel)]="modifEtat">
+            <button (click)="taskService.EditL(task, modifLibelle, modifEtat); reloadTasks(); inactif()">Enregistrer</button>
+        </div>
+    </div>
+    <ng-template #editionActive>
+        <div>
+            <h3>{{ task.name }}</h3>
+            <h3>{{ task.completed }}</h3>
+            <button (click)="actif()">Modifier</button>
+        </div>
+    </ng-template>
+</div>
