@@ -12,68 +12,77 @@ export class TaskService {
 //  ];
 //  newTask = "";
 
+defaultTasks: Task[] = [];
+
+monStockage = localStorage;
 
  initLocalStorage():void{
-  if (!localStorage.getItem('tasks')) {
-    const defaultTasks = [
-      new Task('Benjamin'),
-      new Task('Au secours !'),
+  const taskStorage = this.monStockage.getItem('tasks');
+  if (!taskStorage) {
+      this.defaultTasks = [
+      new Task('travailler', false,  new Date(), new Date(Date.now() + 24 * 60 * 60 * 1000), "Romain", "personnel", "normal"),
+      new Task('uriner', false,  new Date(), new Date(Date.now() + 24 * 60 * 60 * 1000), "Eddy", "personnel", "importante"),
+      new Task('marvel rivals', false,  new Date(), new Date(Date.now() + 24 * 60 * 60 * 1000), "Loris", "personnel", "faible")
     ];
-    localStorage.setItem('tasks', JSON.stringify(defaultTasks));
+    this.monStockage.setItem('tasks', JSON.stringify(this.defaultTasks));
+  }
+  else{
+    this.defaultTasks = JSON.parse(taskStorage).map(
+      (task: Task) => new Task(task.name, task.completed, task.dateCreation, task.dateEcheance, task.user, task.type, task.criticite)
+    );
   }
  }
 
- addTaskL(val: string): void {
-  if (val && val.trim() !== '') {
-    const tasks = this.GetAllTasksL();
-    const taskobj = new Task(val);
-    tasks.push(taskobj);
-    this.updateLocalStorage(tasks);
-  }
+ addTaskL(name: string, completed: boolean = false, dateCreation: Date = new Date(), dateEcheance: Date, user: string, type: string, criticite: string): void {
+    const taskobj = new Task(name, completed, dateCreation, dateEcheance, user, type, criticite);
+    this.defaultTasks.push(taskobj);
+    this.updateLocalStorage();
 }
 
  GetAllTasksL(): Task[] {
-  const tasks = localStorage.getItem('tasks');
-  return tasks ? JSON.parse(tasks) : [];
+  return this.defaultTasks;
 }
 
 GetTaskL(index: number): Task {
-  const tasks = this.GetAllTasksL();
-  return tasks[index];
+  return this.defaultTasks[index];
 }
 
 modifEtatL(index: number): void {
-  const tasks = this.GetAllTasksL();
-  tasks[index].completed = !tasks[index].completed;
-  this.updateLocalStorage(tasks);
+  this.defaultTasks[index].completed = !this.defaultTasks[index].completed;
+  this.updateLocalStorage();
 }
 
 MajTaskL(index: number, MajTask: Task): void {
-  const tasks = this.GetAllTasksL();
-  tasks[index] = MajTask;
-  this.updateLocalStorage(tasks);
+  this.defaultTasks[index] = MajTask;
+  this.updateLocalStorage();
 }
 
 
 removeTaskL(index: number): void {
-  const tasks = this.GetAllTasksL();
-  tasks.splice(index, 1);
-  this.updateLocalStorage(tasks);
+  this.defaultTasks.splice(index, 1);
+  this.updateLocalStorage();
 }
 
-private updateLocalStorage(tasks: Task[]): void {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
+private updateLocalStorage(): void {
+  this.monStockage.setItem('tasks', JSON.stringify(this.defaultTasks));
 }
 
-EditL(task: Task, libelle: string, state: boolean): void {
+EditL(index: number, task: Task, libelle: string, state: boolean, dc: Date, de: Date, user: string, type: string, criticite: string): void {
   task.name = libelle;
   task.completed = state;
-  const tasks = this.GetAllTasksL();
-  const index = tasks.findIndex((t) => t.name === task.name);
-  if (index !== -1) {
-    tasks[index] = task;
-    this.updateLocalStorage(tasks);
-  }
+  task.dateCreation = dc;
+  task.dateEcheance = de;
+  task.user = user;
+  task.type = type;
+  task.criticite = criticite;
+  this.defaultTasks[index].name = task.name;
+  this.defaultTasks[index].completed = task.completed;
+  this.defaultTasks[index].dateCreation = task.dateCreation;
+  this.defaultTasks[index].dateEcheance = task.dateEcheance;
+  this.defaultTasks[index].user = task.user;
+  this.defaultTasks[index].type = task.type;
+  this.defaultTasks[index].criticite = task.criticite;
+  this.updateLocalStorage();
 }
 
 refreshPage(): void {
@@ -119,12 +128,16 @@ refreshPage(): void {
 }
 
 export class Task implements iTask{
-  constructor(public name: string, public completed: boolean = false ){
-
-  }
+  constructor(public name: string, public completed: boolean = false, public dateCreation: Date = new Date(), public dateEcheance: Date, public user: string, public type: string, public criticite: string){}
 }
 
 export interface iTask {
   name: string;
   completed: boolean;
+  dateCreation: Date;
+  dateEcheance: Date;
+  user: string;
+  type: string;
+  criticite: string;
  }
+ 

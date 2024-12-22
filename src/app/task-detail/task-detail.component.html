@@ -1,15 +1,25 @@
-<div class="content">
+<div class="content">   
     <div *ngIf="edit; else editionActive">
         <div class="content">
             <input type="text" [(ngModel)]="modifLibelle">
             <input type="checkbox" [(ngModel)]="modifEtat">
-            <button (click)="taskService.EditL(task, modifLibelle, modifEtat); reloadTasks(); inactif()">Enregistrer</button>
+            <input type="date" [(ngModel)]="modifDateCreation">
+            <input type="date" [(ngModel)]="modifDateEcheance">
+            <input type="text" [(ngModel)]="modifUser">
+            <input type="text" [(ngModel)]="modifType">
+            <input type="text" [(ngModel)]="modifcriticite">
+            <button (click)="taskService.EditL(id, task, modifLibelle, modifEtat, modifDateCreation, modifDateEcheance, modifUser, modifType, modifcriticite); inactif();">Enregistrer</button>
         </div>
     </div>
     <ng-template #editionActive>
         <div>
             <h3>{{ task.name }}</h3>
             <h3>{{ task.completed }}</h3>
+            <h3>{{ task.dateCreation }}</h3>
+            <h3>{{ task.dateEcheance }}</h3>
+            <h3>{{ task.user }}</h3>
+            <h3>{{ task.type }}</h3>
+            <h3>{{ task.criticite }}</h3>
             <button (click)="actif()">Modifier</button>
         </div>
     </ng-template>

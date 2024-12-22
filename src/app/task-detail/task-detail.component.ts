@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TaskService } from '../task.service';
+import { Task, TaskService } from '../task.service';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -12,12 +12,17 @@ import { FormsModule } from '@angular/forms';
 })
 export class TaskDetailComponent {
 
-  task: any; 
+  task: Task | any; 
   taskService = new TaskService();
   tasks = this.taskService.GetAllTasksL();
   id: number = 0; 
-  modifLibelle = "";
-  modifEtat =  true;
+  modifLibelle: string = "";
+  modifEtat: boolean =  true;
+  modifDateCreation: Date = new Date();
+  modifDateEcheance: Date = new Date();
+  modifType: string = "";
+  modifcriticite: string = "";
+  modifUser: string = "";
   edit: boolean = false;
 
   constructor(private route: ActivatedRoute) {
@@ -28,18 +33,25 @@ export class TaskDetailComponent {
     this.edit = true;
     this.modifEtat = this.task.completed;
     this.modifLibelle = this.task.name;
+    this.modifDateCreation = this.task.dateCreation;
+    this.modifDateEcheance = this.task.dateEcheance;
+    this.modifUser = this.task.user;
+    this.modifType = this.task.type;
+    this.modifcriticite = this.task.criticite;
   }
 
   inactif():void{
     this.edit = false;
   }
 
-  reloadTasks(): void {
-    this.task = this.taskService.GetAllTasksL(); // Recharger la liste des tâches
-  }
-  
-
   ngOnInit(): void {
     this.task = this.taskService.GetTaskL(this.id);
+    this.modifLibelle = this.task.name;
+    this.modifEtat = this.task.completed;
+    this.modifDateCreation = this.task.dateCreation;
+    this.modifDateEcheance = this.task.dateEcheance;
+    this.modifUser = this.task.user;
+    this.modifType = this.task.type;
+    this.modifcriticite = this.task.criticite;
   }
 }

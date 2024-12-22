@@ -17,19 +17,20 @@ export class TaskListComponent {
 
   tasks = this.taskService.GetAllTasksL();
 
-  newTask = "";
+  name: string = "";
+  completed: boolean = false;
+  datecrea: Date = new Date();
+  dateeche: Date = new Date();
+  user: string = "";
+  type: string = "";
+  criticite: string = "";
 
   isBackgroundBlack: boolean = false;
 
   toggleBackground(): void {
     this.isBackgroundBlack = !this.isBackgroundBlack;
   }
-
-  reloadTasks(): void {
-    this.tasks = this.taskService.GetAllTasksL(); // Recharger la liste des tâches
-  }
   
-
   constructor(public ts: TaskService) {}
 }
 
